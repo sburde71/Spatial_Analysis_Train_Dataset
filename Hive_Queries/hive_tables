@@ -1,0 +1,27 @@
+--Create Hive table Train
+
+CREATE EXTERNAL TABLE IF NOT EXISTS train (key TIMESTAMP, fare_amount INT, pickup_datetime STRING, pickup_longitude DOUBLE, pickup_latitude DOUBLE, dropoff_longitude DOUBLE, dropoff_latitude DOUBLE, passenger_count INT)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sburde71/train'
+TBLPROPERTIES ('skip.header.line.count' = '1');
+
+--Create hive table train_data with ID and Non-Null values
+
+CREATE TABLE train_data
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sburde71/train/data'
+AS 
+SELECT cast(cast(SUBSTRING(key, 27, 4) as STRING) as INT) id, fare_amount, pickup_datetime, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, passenger_count
+FROM train WHERE pickup_longitude != 0 AND pickup_latitude != 0 AND dropoff_longitude != 0 AND dropoff_latitude != 0;
+
+--Create train_distance_data using Spatial Functions for Analysis
+
+CREATE TABLE train_distance_data
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sburde71/train/data'
+AS
+select id, fare_amount, pickup_datetime, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, st_geodesiclengthwgs84(st_setSRID(Line, 4326)) Distance, st_polygon(st_geodesiclengthwgs84(st_setSRID(Line, 4326))) Shape, passenger_count
+from
+(select cast(cast(SUBSTRING(key, 27, 4) as STRING) as INT) id, fare_amount, pickup_datetime, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, st_linestring(pickup_longitude,pickup_latitude,dropoff_longitude,dropoff_latitude) Line, passenger_count
+from train WHERE pickup_longitude != 0 AND pickup_latitude != 0 AND dropoff_longitude != 0 AND dropoff_latitude != 0) Sub;
+

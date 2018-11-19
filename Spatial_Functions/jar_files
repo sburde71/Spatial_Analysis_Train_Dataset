@@ -1,0 +1,28 @@
+add jar hdfs:///user/sburde/gis-tools-hadoop-2.0.jar;
+add jar hdfs:///user/sburde/spatial-sdk-hadoop.jar;
+add jar hdfs:///user/sburde/esri-geometry-api-2.0.0.jar;
+
+create temporary function st_geometry as 'com.esri.hadoop.hive.ST_Geometry';
+create temporary function st_geomfromtext as 'com.esri.hadoop.hive.ST_GeomFromText';
+create temporary function st_geometrytype as 'com.esri.hadoop.hive.ST_GeometryType';
+create temporary function st_asjson as 'com.esri.hadoop.hive.ST_AsJson';
+create temporary function st_asbinary as 'com.esri.hadoop.hive.ST_AsBinary';
+create temporary function st_astext as 'com.esri.hadoop.hive.ST_AsText';
+create temporary function st_intersects as 'com.esri.hadoop.hive.ST_Intersects';
+create temporary function st_x as 'com.esri.hadoop.hive.ST_X';
+create temporary function st_y as 'com.esri.hadoop.hive.ST_Y';
+create temporary function st_srid as 'com.esri.hadoop.hive.ST_SRID';
+create temporary function st_linestring as 'com.esri.hadoop.hive.ST_LineString';
+create temporary function st_pointn as 'com.esri.hadoop.hive.ST_PointN';
+create temporary function st_startpoint as 'com.esri.hadoop.hive.ST_StartPoint';
+create temporary function st_endpoint as 'com.esri.hadoop.hive.ST_EndPoint';
+create temporary function st_numpoints as 'com.esri.hadoop.hive.ST_NumPoints';
+create temporary function st_point as 'com.esri.hadoop.hive.ST_Point';
+create temporary function st_intersects as 'com.esri.hadoop.hive.ST_Intersects';
+create temporary function st_length as 'com.esri.hadoop.hive.ST_Length';
+create temporary function st_GeodesicLengthWGS84 as 'com.esri.hadoop.hive.ST_GeodesicLengthWGS84';
+create temporary function st_setSRID as 'com.esri.hadoop.hive.ST_SetSRID'; 
+create temporary function st_polygon as 'com.esri.hadoop.hive.ST_Polygon';
+create temporary function st_bin as 'com.esri.hadoop.hive.ST_Bin';
+create temporary function st_binenvelope as 'com.esri.hadoop.hive.ST_BinEnvelope';
+create temporary function st_astext as 'com.esri.hadoop.hive.ST_AsText';

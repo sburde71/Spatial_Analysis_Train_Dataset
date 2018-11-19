@@ -25,3 +25,13 @@ from
 (select cast(cast(SUBSTRING(key, 27, 4) as STRING) as INT) id, fare_amount, pickup_datetime, pickup_longitude, pickup_latitude, dropoff_longitude, dropoff_latitude, st_linestring(pickup_longitude,pickup_latitude,dropoff_longitude,dropoff_latitude) Line, passenger_count
 from train WHERE pickup_longitude != 0 AND pickup_latitude != 0 AND dropoff_longitude != 0 AND dropoff_latitude != 0) Sub;
 
+-- To get the fuel consumption data
+CREATE TABLE train_fuel_data
+ROW FORMAT DELIMITED FIELDS TERMINATED BY ','
+STORED AS TEXTFILE LOCATION '/user/sburde71/train/fuel'
+AS
+SELECT id, fare_amount, Distance,
+CASE WHEN Fuel_Consumption < 25.0 THEN 'LESS FUEL CONSUMPTION'
+     WHEN Fuel_Consumption BETWEEN 25.0 AND 35.0 THEN 'NORMAL FUEL CONSUMPTION'
+     ELSE 'HIGH FUEL CONSUMPTION' END AS fuel_consumption_categories
+FROM (SELECT id, fare_amount, Distance, ( Distance / (10 * fare_amount)) Fuel_Consumption FROM train_distance_data ) Fuel;

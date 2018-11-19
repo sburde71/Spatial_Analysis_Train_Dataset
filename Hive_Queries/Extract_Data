@@ -1,0 +1,22 @@
+-- To get the line from longitude and lattitude
+
+select id, pickup_datetime,
+st_linestring(pickup_longitude,pickup_latitude,dropoff_longitude,dropoff_latitude) Line
+from train_data limit 10;
+
+-- To get the distance from line 
+
+select key, pickup_datetime, st_geodesiclengthwgs84(st_setSRID(Line, 4326)) Distance
+from
+(select key, pickup_datetime,
+st_linestring(pickup_longitude,pickup_latitude,dropoff_longitude,dropoff_latitude) Line
+from train_rides) Sub limit 10;
+
+-- Extract ID from key column using Cast function
+
+select cast(cast(SUBSTRING(key, 27, 4) as STRING) as INT) id from train_data limit 10;
+
+
+--To get the Fuel Consumption column from train_distance_data table
+
+SELECT id, fare_amount, Distance, ( Distance / (10 * fare_amount)) Fuel_Consumption FROM train_distance_data limit 10;
